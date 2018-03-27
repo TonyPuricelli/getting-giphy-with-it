@@ -23,9 +23,11 @@ $("#submit").on("click", function(event) {
     var show = $("#submitBox").val().trim();
     console.log(show);
 
-    // push to array and re-render buttons
-    listOfShows.push(show);
-    renderButtons();
+    // if new title, push to array and re-render buttons
+    if (listOfShows.indexOf(show) < 0) {
+        listOfShows.push(show);
+        renderButtons();
+    };
 
     // call function to display GIF results of query
     showMeGIFs(show);
@@ -40,7 +42,7 @@ function renderButtons() {
     for (var i = 0; i < listOfShows.length; i++) {
         // create new buttons with common class and unique data type
         var newBtn = $("<button>");
-        newBtn.addClass("showBtn btn btn-secondary");
+        newBtn.addClass("showBtn btn btn-outline-dark");
         newBtn.attr("data-name", listOfShows[i]);
         newBtn.text(listOfShows[i]);
         // appends to buttons div
@@ -53,7 +55,7 @@ function showMeGIFs(show) {
     $("#display").empty();
 
     // queryURL for Giphy API -- adds in selected show
-    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + show + "&api_key=" + apiKey + "&limit=10";
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + show + "&api_key=" + apiKey + "&limit=12";
 
     // AJAX call to display
     $.ajax({
@@ -73,8 +75,6 @@ function showMeGIFs(show) {
             // create variables for still and animated images
             var loopingImg = results[i].images.fixed_height.url;
             var stillImg = results[i].images.fixed_height_still.url;
-            console.log(loopingImg);
-            console.log(stillImg);
 
             // add still image as source and as an alt attribute
             newImage.attr("src", stillImg);
@@ -90,13 +90,18 @@ function showMeGIFs(show) {
             newImage.addClass("gif");
 
             // Creating a paragraph tag with the result item's rating
-            var p = $("<p>").text("Rating: " + results[i].rating);
+            var p = $("<p>").text("Rating: " + (results[i].rating).toUpperCase());
 
-            // append rating to image
-            newImage.append(p);
+            // div for two image elements
+            var imgBox = $("<div>").addClass("imgBox");
 
             // append img tag to display div
-            $("#display").append(newImage);
+            imgBox.append(newImage);
+
+            // append rating to display div
+            imgBox.append(p);
+
+            $("#display").append(imgBox);
         
         };  
       });
