@@ -5,3 +5,5 @@ This project accesses the Giphy API using AJAX and jQuery to display a dozen ima
 On user click, the images change state from still to looping and vice versa.
 
 Bootstrap elements are combined with custom styles for display.
+
+The deployed project is available here: https://tonypuricelli.github.io/getting-giphy-with-it/
